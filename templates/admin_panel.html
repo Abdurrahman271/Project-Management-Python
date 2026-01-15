@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Panel — Project Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- DataTables (optional) -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Custom CSS -->
+  <link href="/static/css/admin.css" rel="stylesheet">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Admin Panel</span>
+      </div>
+      <nav class="menu">
+        <a href="/dashboard" class="menu-item"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+        <a href="/project-management" class="menu-item"><i class="fa-solid fa-table-list"></i> Manajemen Project</a>
+        <a href="/timeline" class="menu-item"><i class="fa-solid fa-calendar-days"></i> Timeline</a>
+        <a href="/project-timeline" class="menu-item"><i class="fa-solid fa-diagram-project"></i> Gantt</a>
+        <a href="#" id="menu-import" class="menu-item"><i class="fa-solid fa-file-import"></i> Import</a>
+        <a href="#" id="menu-export-excel" class="menu-item"><i class="fa-solid fa-file-excel"></i> Export Excel</a>
+        <a href="#" id="menu-export-pdf" class="menu-item"><i class="fa-solid fa-file-pdf"></i> Export PDF</a>
+        <div class="menu-sep"></div>
+        <a href="/admin" class="menu-item active"><i class="fa-solid fa-gauge-high"></i> Admin Panel</a>
+      </nav>
+      <div class="sidebar-footer">
+        <small>© 2025 Project Management</small>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="admin-main">
+      <!-- Header -->
+      <header class="admin-header">
+        <div>
+          <h1 class="h4 mb-1">Pusat Kontrol</h1>
+          <div class="text-muted">Kelola project, visualisasi, dan operasi terpusat</div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btnOpenAddModal"><i class="fa-solid fa-plus"></i> Tambah Project</button>
+          <button class="btn btn-outline-secondary" id="btnOpenImportModal"><i class="fa-solid fa-file-import"></i> Import</button>
+        </div>
+      </header>
+
+      <!-- KPI cards -->
+      <section class="kpi-grid">
+        <div class="card kpi-card">
+          <div class="card-body">
+            <div class="kpi-title">Total Project</div>
+            <div class="kpi-value" id="kpiTotal">0</div>
+            <div class="kpi-sub">Semua project terdaftar</div>
+          </div>
+        </div>
+        <div class="card kpi-card">
+          <div class="card-body">
+            <div class="kpi-title">Completed</div>
+            <div class="kpi-value" id="kpiCompleted">0</div>
+            <div class="kpi-sub">Selesai</div>
+          </div>
+        </div>
+        <div class="card kpi-card">
+          <div class="card-body">
+            <div class="kpi-title">Bulan ini</div>
+            <div class="kpi-value" id="kpiMonth">0</div>
+            <div class="kpi-sub">Submit bulan berjalan</div>
+          </div>
+        </div>
+        <div class="card kpi-card">
+          <div class="card-body">
+            <div class="kpi-title">Top Priority</div>
+            <div class="kpi-value" id="kpiTopPriority">-</div>
+            <div class="kpi-sub">Dominan</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="charts-grid">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Status Distribution</span>
+            <span class="text-muted small">New, In Progress, Pending, Completed</span>
+          </div>
+          <div class="card-body">
+            <canvas id="chartStatus" height="140"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Priority Distribution</span>
+            <span class="text-muted small">Low, Medium, High, Urgent</span>
+          </div>
+          <div class="card-body">
+            <canvas id="chartPriority" height="140"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Monthly Submissions</span>
+            <span class="text-muted small">Per bulan</span>
+          </div>
+          <div class="card-body">
+            <canvas id="chartMonthly" height="140"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Table -->
+      <section class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Daftar Project</span>
+          <div class="d-flex gap-2">
+            <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Cari BRD, Project, PIC...">
+            <button class="btn btn-sm btn-outline-secondary" id="btnClearSearch"><i class="fa-solid fa-eraser"></i> Clear</button>
+          </div>
+        </div>
+        <div class="card-body table-responsive">
+          <table id="tblProjects" class="table table-striped table-hover align-middle" style="width:100%">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>BRD No</th>
+                <th>Project / Fitur</th>
+                <th>Link BRD</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Tanggal Submit</th>
+                <th>Tanggal Completed</th>
+                <th>PIC</th>
+                <th>Catatan</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Recent list -->
+      <section class="card mt-3">
+        <div class="card-header">Aktivitas Terbaru</div>
+        <div class="card-body">
+          <div id="recentList" class="list-group"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Tambah -->
+  <div class="modal fade" id="modalAddProject" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <form id="formAddProject">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Project</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body row g-3">
+            <div class="col-md-4">
+              <label class="form-label">BRD No</label>
+              <input name="brd_no" class="form-control" required>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Project / Fitur</label>
+              <input name="project" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Link BRD</label>
+              <input name="link_brd" class="form-control" placeholder="https://...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">PIC</label>
+              <input name="pic" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Contact Person</label>
+              <input name="contact_person" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-select">
+                <option>New</option>
+                <option>In Progress</option>
+                <option>Pending</option>
+                <option>Completed</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Priority</label>
+              <select name="priority" class="form-select">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+                <option>Urgent</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Submit</label>
+              <input name="tanggal_submit" type="date" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Completed</label>
+              <input name="tanggal_completed" type="date" class="form-control">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Catatan</label>
+              <textarea name="catatan" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit -->
+  <div class="modal fade" id="modalEditProject" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <form id="formEditProject">
+          <input type="hidden" name="uid">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Project</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body row g-3">
+            <div class="col-md-4">
+              <label class="form-label">BRD No</label>
+              <input name="brd_no" class="form-control" required>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Project / Fitur</label>
+              <input name="project" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Link BRD</label>
+              <input name="link_brd" class="form-control" placeholder="https://...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">PIC</label>
+              <input name="pic" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Contact Person</label>
+              <input name="contact_person" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-select">
+                <option>New</option>
+                <option>In Progress</option>
+                <option>Pending</option>
+                <option>Completed</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Priority</label>
+              <select name="priority" class="form-select">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+                <option>Urgent</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Submit</label>
+              <input name="tanggal_submit" type="date" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Completed</label>
+              <input name="tanggal_completed" type="date" class="form-control">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Catatan</label>
+              <textarea name="catatan" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Import -->
+  <div class="modal fade" id="modalImport" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content">
+        <form id="formImport">
+          <div class="modal-header">
+            <h5 class="modal-title">Import Excel</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">File Excel (.xlsx)</label>
+              <input type="file" name="file" accept=".xlsx" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mode</label>
+              <select name="mode" class="form-select">
+                <option value="append">Append (tambah)</option>
+                <option value="replace">Replace (ganti semua)</option>
+              </select>
+            </div>
+            <div class="text-muted small">Kolom yang didukung: BRD No, Project/Fitur, Link BRD, PIC, Contact Person, Status, Priority, Tanggal Submit, Tanggal Completed, Catatan</div>
+            <div id="importStatus" class="mt-2 text-secondary"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Import</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="/static/js/admin_panel.js"></script>
+</body>
+</html>

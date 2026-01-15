@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Timeline — Project Management</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body{background:#f8fafc;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
+    .app-header{display:flex;align-items:center;justify-content:space-between;padding:18px;background:#fff;border-bottom:1px solid #eef2f7}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .timeline{position:relative;padding:20px 0}
+    .timeline::before{content:"";position:absolute;left:20px;top:0;bottom:0;width:3px;background:#e6eef8;border-radius:2px}
+    .timeline-item{position:relative;padding:12px 12px 12px 56px;margin-bottom:12px;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
+    .timeline-item .meta{font-size:12px;color:#6b7280}
+    .timeline-bullet{position:absolute;left:8px;top:18px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+    .bullet-submit{background:#0ea5e9}
+    .bullet-completed{background:#10b981}
+    @media (max-width:767px){ .timeline{padding-left:10px} .timeline::before{left:12px} .timeline-item{padding-left:64px} }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="d-flex align-items-center gap-3">
+      <div class="logo">PM</div>
+      <div>
+        <div style="font-weight:700">Timeline</div>
+        <div style="color:#6b7280;font-size:13px">Peristiwa submit dan completion proyek</div>
+      </div>
+    </div>
+    <div>
+      <a href="/" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Kembali</a>
+    </div>
+  </header>
+
+  <main class="container my-4">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card-ghost">
+          <h6>Timeline Events</h6>
+          <div id="timeline" class="timeline"></div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card-ghost">
+          <h6>Filter</h6>
+          <div class="mb-2">
+            <label class="form-label small">Tipe</label>
+            <select id="filterType" class="form-select form-select-sm">
+              <option value="">Semua</option>
+              <option value="submit">Submit</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Cari</label>
+            <input id="filterText" class="form-control form-control-sm" placeholder="Cari BRD, Project, PIC...">
+          </div>
+          <div class="d-grid">
+            <button id="btnFilterTimeline" class="btn btn-primary btn-sm">Terapkan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/static/js/timeline.js"></script>
+</body>
+</html>

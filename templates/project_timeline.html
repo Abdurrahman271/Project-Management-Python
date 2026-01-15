@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Project Timeline — Yearly View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="/static/css/project_timeline.css" rel="stylesheet">
+</head>
+<body>
+  <div class="pt-layout">
+    <!-- Header -->
+    <header class="pt-header">
+      <div>
+        <h1 class="h4 mb-1">Project Timeline (Yearly)</h1>
+        <div class="text-muted">Visualisasi timeline per project — Jan s/d Dec</div>
+      </div>
+      <div class="pt-actions">
+        <a href="/admin" class="btn btn-outline-secondary"><i class="fa-solid fa-gauge-high"></i> Admin Panel</a>
+        <button id="btnExportPng" class="btn btn-outline-primary"><i class="fa-solid fa-image"></i> Export PNG</button>
+      </div>
+    </header>
+
+    <!-- Controls -->
+    <section class="pt-controls card">
+      <div class="card-body row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Status</label>
+          <select id="filterStatus" class="form-select">
+            <option value="">Semua</option>
+            <option>New</option>
+            <option>In Progress</option>
+            <option>Pending</option>
+            <option>Completed</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Priority</label>
+          <select id="filterPriority" class="form-select">
+            <option value="">Semua</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Urgent</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Cari</label>
+          <input id="filterSearch" class="form-control" placeholder="Cari BRD, Project, PIC...">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button id="btnApplyFilter" class="btn btn-primary w-100"><i class="fa-solid fa-filter"></i> Terapkan</button>
+          <button id="btnClearFilter" class="btn btn-outline-secondary w-100"><i class="fa-solid fa-eraser"></i> Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Legend -->
+    <section class="pt-legend card">
+      <div class="card-body d-flex flex-wrap gap-3 align-items-center">
+        <div class="legend-item"><span class="legend-dot legend-low"></span> Low</div>
+        <div class="legend-item"><span class="legend-dot legend-medium"></span> Medium</div>
+        <div class="legend-item"><span class="legend-dot legend-high"></span> High</div>
+        <div class="legend-item"><span class="legend-dot legend-urgent"></span> Urgent</div>
+        <div class="legend-item"><span class="legend-dot legend-default"></span> Tanpa priority</div>
+        <div class="ms-auto text-muted small">Garis vertikal menunjukkan “Today”</div>
+      </div>
+    </section>
+
+    <!-- Timeline grid -->
+    <section class="pt-grid card" id="timelineContainer">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Year: <span id="yearLabel"></span></span>
+        <div class="text-muted small">Kolom: Jan–Dec</div>
+      </div>
+      <div class="card-body">
+        <div id="timelineGrid" class="timeline-grid">
+          <!-- Header months -->
+          <div class="grid-row grid-header">
+            <div class="grid-col grid-col-title">Project</div>
+            <div class="grid-col">Jan</div>
+            <div class="grid-col">Feb</div>
+            <div class="grid-col">Mar</div>
+            <div class="grid-col">Apr</div>
+            <div class="grid-col">May</div>
+            <div class="grid-col">Jun</div>
+            <div class="grid-col">Jul</div>
+            <div class="grid-col">Aug</div>
+            <div class="grid-col">Sep</div>
+            <div class="grid-col">Oct</div>
+            <div class="grid-col">Nov</div>
+            <div class="grid-col">Dec</div>
+          </div>
+          <!-- Rows injected by JS -->
+          <div id="gridRows"></div>
+          <!-- Today line -->
+          <div id="todayLine" class="today-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-footer text-muted">
+      © 2025 Project Management — Timeline yearly view
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/js/project_timeline.js"></script>
+</body>
+</html>

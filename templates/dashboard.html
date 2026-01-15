@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Project Management</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body{background:#f8fafc;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
+    .app-header{display:flex;align-items:center;justify-content:space-between;padding:18px;background:#fff;border-bottom:1px solid #eef2f7}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .card-ghost{background:#fff;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(15,23,42,0.04)}
+    .kpi{display:flex;gap:12px;flex-wrap:wrap}
+    .kpi .item{flex:1;min-width:160px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 6px 18px rgba(15,23,42,0.03)}
+    @media (max-width:767px){ .app-header{flex-direction:column;align-items:flex-start} .kpi{flex-direction:column} }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="d-flex align-items-center gap-3">
+      <div class="logo">PM</div>
+      <div>
+        <div style="font-weight:700">Dashboard</div>
+        <div style="color:#6b7280;font-size:13px"></div>
+      </div>
+    </div>
+    <div>
+      <a href="/" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Kembali</a>
+    </div>
+  </header>
+
+  <main class="container my-4">
+    <div class="row g-3 mb-3">
+      <div class="col-12">
+        <div class="card-ghost">
+          <div class="kpi">
+            <div class="item">
+              <div style="font-size:12px;color:#6b7280">Total Projects</div>
+              <div id="kpiTotal" style="font-weight:700;font-size:22px">0</div>
+            </div>
+            <div class="item">
+              <div style="font-size:12px;color:#6b7280">Completed</div>
+              <div id="kpiCompleted" style="font-weight:700;font-size:22px">0</div>
+            </div>
+            <div class="item">
+              <div style="font-size:12px;color:#6b7280">Top Priority</div>
+              <div id="kpiTopPriority" style="font-weight:700;font-size:22px">-</div>
+            </div>
+            <div class="item">
+              <div style="font-size:12px;color:#6b7280">Active This Month</div>
+              <div id="kpiMonth" style="font-weight:700;font-size:22px">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="card-ghost">
+          <h6>Projects per Month</h6>
+          <canvas id="chartMonthly" height="160"></canvas>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card-ghost mb-3">
+          <h6>Status Distribution</h6>
+          <canvas id="chartStatus" height="200"></canvas>
+        </div>
+        <div class="card-ghost">
+          <h6>Priority Distribution</h6>
+          <canvas id="chartPriority" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-3">
+      <div class="col-12">
+        <div class="card-ghost">
+          <h6>Recent Projects</h6>
+          <div id="recentList" class="list-group"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
