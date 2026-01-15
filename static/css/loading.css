@@ -1,0 +1,20 @@
+/* loading.css */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
+  color: #e2e8f0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.3s ease;
+}
+.loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loading-content { text-align:center; }
+.wave-loader { display:flex; gap:6px; justify-content:center; align-items:center; }
+.wave-loader span { display:block; width:8px; height:24px; background:#60a5fa; border-radius:4px; animation: wave 1.2s infinite ease-in-out; }
+.wave-loader span:nth-child(2){ animation-delay:0.1s } .wave-loader span:nth-child(3){ animation-delay:0.2s } .wave-loader span:nth-child(4){ animation-delay:0.3s } .wave-loader span:nth-child(5){ animation-delay:0.4s }
+@keyframes wave { 0%,40%,100%{ transform: scaleY(0.4) } 20%{ transform: scaleY(1) } }
+.loading-text { margin-top:12px; font-weight:600; }

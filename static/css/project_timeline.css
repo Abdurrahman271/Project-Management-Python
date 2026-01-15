@@ -1,0 +1,153 @@
+/* Layout */
+.pt-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.pt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.pt-actions {
+  display: flex;
+  gap: 10px;
+}
+.pt-controls,
+.pt-legend,
+.pt-grid {
+  margin-bottom: 12px;
+}
+.pt-footer {
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* Legend */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.legend-low {
+  background: #60a5fa;
+}
+.legend-medium {
+  background: #f59e0b;
+}
+.legend-high {
+  background: #f97316;
+}
+.legend-urgent {
+  background: #ef4444;
+}
+.legend-default {
+  background: #94a3b8;
+}
+
+/* Timeline grid */
+.timeline-grid {
+  position: relative;
+  overflow-x: auto;
+}
+.grid-row {
+  display: grid;
+  grid-template-columns: 240px repeat(12, 1fr);
+  align-items: center;
+}
+.grid-header {
+  font-weight: 700;
+  color: #334155;
+}
+.grid-col {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+}
+.grid-col-title {
+  text-align: left;
+}
+.row-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.row-title .title {
+  font-weight: 600;
+  color: #0f172a;
+}
+.row-title .meta {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Bars */
+.bar {
+  position: relative;
+  height: 22px;
+  border-radius: 6px;
+  opacity: 0.95;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+.bar.low {
+  background: #60a5fa;
+}
+.bar.medium {
+  background: #f59e0b;
+}
+.bar.high {
+  background: #f97316;
+}
+.bar.urgent {
+  background: #ef4444;
+}
+.bar.default {
+  background: #94a3b8;
+}
+.bar .bar-label {
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Today line */
+.today-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #0ea5e9;
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .grid-row {
+    grid-template-columns: 200px repeat(12, 1fr);
+  }
+}
+@media (max-width: 576px) {
+  .grid-row {
+    grid-template-columns: 160px repeat(12, 1fr);
+  }
+  .row-title .meta {
+    display: none;
+  }
+}
